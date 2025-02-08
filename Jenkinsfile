@@ -10,7 +10,7 @@ node {
         // Install dependencies
         stage('Build') {
             echo 'Installing dependencies...'
-            sh 'npm install'
+            sh 'npm ci'
         }
 
         // Build aplikasi React
@@ -30,7 +30,7 @@ node {
             echo 'Archiving build artifacts...'
             archiveArtifacts 'build/**'
         }
-        
+
 
     }
 }
