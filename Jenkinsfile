@@ -30,11 +30,7 @@ node {
             echo 'Archiving build artifacts...'
             archiveArtifacts 'build/**'
         }
+        
 
-        // Menjalankan aplikasi React
-        stage('Run') {
-            echo 'Starting React app on port 3000...'
-            sh 'npm start'
-        }
     }
 }
