@@ -10,7 +10,7 @@ node {
         // Install dependencies
         stage('Build') {
             echo 'Installing dependencies...'
-            sh 'npm ci'
+            sh 'npm install'
         }
 
         // Build aplikasi React
