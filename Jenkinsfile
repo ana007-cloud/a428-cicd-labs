@@ -31,6 +31,22 @@ node {
             archiveArtifacts 'build/**'
         }
 
+        // Manual Approval sebelum Deploy
+        stage('Manual Approval') {
+            input {
+                message "Lanjutkan ke tahap Deploy?"
+                ok "Proceed"
+            }
+        }
+
+        // Menjalankan aplikasi (Deploy)
+        stage('Deploy') {
+            echo 'Starting application...'
+            sh 'nohup npm start &'  // Menjalankan aplikasi di background
+            sleep 60  // Menjeda pipeline selama 1 menit
+            echo 'Stopping application...'
+            sh 'pkill -f "npm start"'  // Menghentikan aplikasi setelah 1 menit
+        }
 
     }
 }
