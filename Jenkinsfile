@@ -10,7 +10,7 @@ node {
         // Install dependencies
         stage('Build') {
             echo 'Installing dependencies...'
-            sh 'npm install --prefer-offline --no-audit --progress=false'
+            sh 'npm install'
         }
 
         // Build aplikasi React
