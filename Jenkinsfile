@@ -43,9 +43,10 @@ node {
             echo 'Starting application...'
 
             
-            // Install procps (untuk pkill)
+            // Install procps (untuk pkill) dengan sudo
             echo 'Installing procps...'
-            sh 'apt-get update && apt-get install -y procps'
+            sh 'apt-get update && apt-get install -y sudo'
+            sh 'sudo apt-get install -y procps'
 
             // Menjalankan aplikasi React dengan perintah nohup dan menjalankan di background
             echo 'Running application...'
