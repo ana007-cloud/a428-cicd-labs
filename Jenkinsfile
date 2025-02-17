@@ -33,9 +33,8 @@ node {
 
         // Manual Approval sebelum Deploy
         stage('Manual Approval') {
-            input {
-                message "Lanjutkan ke tahap Deploy?"
-                ok "Proceed"
+            script {
+                input message: "Lanjutkan ke tahap Deploy?", ok: "Proceed"
             }
         }
 
