@@ -1,6 +1,6 @@
 node {
     // Menggunakan Docker dengan Node.js 16
-    docker.image('node:16-buster').inside('-p 3000:3000') {
+    docker.image('node:16-buster-slim').inside('-p 3000:3000') {
         
         
         // Checkout repository
@@ -44,16 +44,15 @@ node {
             echo 'Starting application...'
 
 
-            // Menjalankan aplikasi React dengan perintah nohup dan menjalankan di background
-            echo 'Running application...'
-            sh 'nohup npm start &'
+            // Menjalankan aplikasi React dengan perintah nohup dan menyimpan PID
+            sh 'nohup npm start & echo $! > app.pid'
             
             // Menjeda eksekusi pipeline selama 1 menit
             sleep 60
             
             echo 'Stopping application...'
-            // Menghentikan aplikasi React setelah 1 menit
-            sh 'pkill -f "npm start"'
+            // Menghentikan aplikasi React dengan PID yang telah disimpan
+            sh 'kill -9 $(cat app.pid)'
         }
     }
 }
