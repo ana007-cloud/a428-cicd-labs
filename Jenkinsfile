@@ -1,6 +1,6 @@
 node {
     // Menggunakan Docker dengan Node.js 16
-    docker.image('node:16-buster-slim').inside('-p 3000:3000') {
+    docker.image('node:16-buster').inside('-p 3000:3000') {
         
         // Switch to root user
         sh 'USER root'
@@ -45,9 +45,6 @@ node {
         stage('Deploy') {
             echo 'Starting application...'
 
-            // Install procps untuk pkill
-            echo 'Installing procps...'
-            sh 'apt-get update && apt-get install -y procps'
 
             // Menjalankan aplikasi React dengan perintah nohup dan menjalankan di background
             echo 'Running application...'
