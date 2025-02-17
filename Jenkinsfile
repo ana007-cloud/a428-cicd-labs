@@ -41,10 +41,14 @@ node {
         // Menjalankan aplikasi (Deploy)
         stage('Deploy') {
             echo 'Starting application...'
+
+            
             // Install procps (untuk pkill)
+            echo 'Installing procps...'
             sh 'apt-get update && apt-get install -y procps'
 
             // Menjalankan aplikasi React dengan perintah nohup dan menjalankan di background
+            echo 'Running application...'
             sh 'nohup npm start &'
             
             // Menjeda eksekusi pipeline selama 1 menit
