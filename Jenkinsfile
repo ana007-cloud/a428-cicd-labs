@@ -44,7 +44,8 @@ node {
             sh 'nohup npm start &'  // Menjalankan aplikasi di background
             sleep 60  // Menjeda pipeline selama 1 menit
             echo 'Stopping application...'
-            sh 'apt-get update && apt-get install -y procps && pkill -f "npm start"'  // Menghentikan aplikasi setelah 1 menit
+            // Menginstal procps dan menghentikan aplikasi setelah 1 menit
+            sh 'sudo apt-get update && sudo apt-get install -y procps && sudo pkill -f "npm start"'
         }
 
     }
