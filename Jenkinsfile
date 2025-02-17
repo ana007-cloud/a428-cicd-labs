@@ -40,13 +40,16 @@ node {
 
         // Menjalankan aplikasi (Deploy)
         stage('Deploy') {
-            appImage.inside {
-                echo 'Starting application...'
-                sh 'nohup npm start &'
-                sleep 60
-                echo 'Stopping application...'
-                sh 'pkill -f "npm start"'
-            }
-
+            echo 'Starting application...'
+            // Menjalankan aplikasi React dengan perintah nohup dan menjalankan di background
+            sh 'nohup npm start &'
+            
+            // Menjeda eksekusi pipeline selama 1 menit
+            sleep 60
+            
+            echo 'Stopping application...'
+            // Menghentikan aplikasi React setelah 1 menit
+            sh 'pkill -f "npm start"'
         }
+    }
 }
