@@ -2,8 +2,6 @@ node {
     // Menggunakan Docker dengan Node.js 16
     docker.image('node:16-buster').inside('-p 3000:3000') {
         
-        // Switch to root user
-        sh 'USER root'
         
         // Checkout repository
         stage('Checkout') {
