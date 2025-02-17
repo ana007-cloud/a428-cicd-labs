@@ -40,13 +40,13 @@ node {
 
         // Menjalankan aplikasi (Deploy)
         stage('Deploy') {
-            echo 'Starting application...'
-            sh 'nohup npm start &'  // Menjalankan aplikasi di background
-            sleep 60  // Menjeda pipeline selama 1 menit
-            echo 'Stopping application...'
-            // Menginstal procps dan menghentikan aplikasi setelah 1 menit
-            sh 'sudo apt-get update && sudo apt-get install -y procps && sudo pkill -f "npm start"'
-        }
+            appImage.inside {
+                echo 'Starting application...'
+                sh 'nohup npm start &'
+                sleep 60
+                echo 'Stopping application...'
+                sh 'pkill -f "npm start"'
+            }
 
-    }
+        }
 }
