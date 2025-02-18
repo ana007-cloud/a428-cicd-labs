@@ -50,8 +50,11 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                echo 'Starting application...'
+                 echo 'Executing deploy script...'
+                // Menjalankan deliver.sh untuk tahap deploy
+                sh './jenkins/scripts/deliver.sh'
 
+                echo 'Starting application...'
                 // Menjalankan aplikasi React dengan perintah nohup dan menyimpan PID
                 sh 'nohup npm start & echo $! > app.pid'
                 
