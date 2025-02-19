@@ -22,7 +22,7 @@ node {
             sh './jenkins/scripts/deliver.sh'
 
             echo 'Copying deployment files...'
-            sh 'cp appspec.yml build/'
+            sh 'cp ./appspec.yml build/'
             sh 'cp -r jenkins/scripts build/scripts/'
 
             echo 'Archiving build artifacts…'
