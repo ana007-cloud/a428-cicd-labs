@@ -1,14 +1,23 @@
 node {
     def nodeContainer = docker.image('node:16-buster-slim')
 
+    stage('Prepare Workspace') {
+        echo 'Fetching latest repository state...'
+        sh '''
+            git fetch --all
+            git reset --hard origin/react-app
+            git clean -fdx
+        '''
+    }
+
     stage('Build') {
-        nodeContainer.inside {
+        nodeContainer.inside("-v ${pwd()}:/workspace -w /workspace") {
             sh 'npm install'
         }
     }
 
     stage('Test') {
-        nodeContainer.inside {
+        nodeContainer.inside("-v ${pwd()}:/workspace -w /workspace") {
             sh './jenkins/scripts/test.sh'
         }
     }
@@ -18,27 +27,36 @@ node {
     }
 
     stage('Deploy') {
-        nodeContainer.inside {
-            sh './jenkins/scripts/deliver.sh'
+        nodeContainer.inside("-v ${pwd()}:/workspace -w /workspace") {
+            sh '''
+                ./jenkins/scripts/deliver.sh
 
-            echo 'Copying deployment files...'
-            sh 'cp ./appspec.yml build/'
-            sh 'cp -r jenkins/scripts build/scripts/'
+                echo 'Debugging: Checking files before copying...'
+                ls -lah
+                find . -name "appspec.yml"
+                find . -name "scripts"
 
-            echo 'Archiving build artifacts…'
-            archiveArtifacts artifacts: 'build/**', fingerprint: true
+                echo 'Copying deployment files...'
+                mkdir -p build
+                cp appspec.yml build/
+                cp -r jenkins/scripts build/scripts/
 
-            echo 'Waiting for 1 minute…'
-            sleep 60
+                echo 'Archiving build artifacts…'
+                ls -lah build
+                archiveArtifacts artifacts: 'build/**', fingerprint: true
 
-            echo 'Stopping application...'
-            sh './jenkins/scripts/kill.sh'
+                echo 'Waiting for 1 minute…'
+                sleep 60
+
+                echo 'Stopping application...'
+                ./jenkins/scripts/kill.sh
+            '''
         }
     }
 
-    // Bagian post-execution
     stage('Post') {
         echo 'Pipeline execution completed.'
     }
 }
+
 
