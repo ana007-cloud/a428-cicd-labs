@@ -2,13 +2,13 @@ node {
     def nodeContainer = docker.image('node:16-buster-slim')
 
     stage('Build') {
-        nodeContainer.withRun { c ->
+        nodeContainer.inside {
             sh 'npm install'
         }
     }
 
     stage('Test') {
-        nodeContainer.withRun { c ->
+        nodeContainer.inside {
             sh './jenkins/scripts/test.sh'
         }
     }
@@ -18,7 +18,7 @@ node {
     }
 
     stage('Deploy') {
-        nodeContainer.withRun { c ->
+        nodeContainer.inside {
             sh './jenkins/scripts/deliver.sh'
 
             echo 'Archiving build artifacts…'
@@ -32,9 +32,9 @@ node {
         }
     }
 
-    post {
-        always {
-            echo 'Pipeline execution completed.'
-        }
+    // Bagian post-execution
+    stage('Post') {
+        echo 'Pipeline execution completed.'
     }
 }
+
