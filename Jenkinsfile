@@ -41,10 +41,6 @@ node {
                 cp appspec.yml build/
                 cp -r jenkins/scripts build/scripts/
 
-                echo 'Archiving build artifacts…'
-                ls -lah build
-                archiveArtifacts artifacts: 'build/**', fingerprint: true
-
                 echo 'Waiting for 1 minute…'
                 sleep 60
 
@@ -52,6 +48,10 @@ node {
                 ./jenkins/scripts/kill.sh
             '''
         }
+
+        // Memindahkan `archiveArtifacts` ke dalam blok Groovy agar dikenali oleh Jenkins
+        archiveArtifacts artifacts: 'build/**', fingerprint: true
+
     }
 
     stage('Post') {
