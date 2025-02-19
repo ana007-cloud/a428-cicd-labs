@@ -21,6 +21,10 @@ node {
         nodeContainer.inside {
             sh './jenkins/scripts/deliver.sh'
 
+            echo 'Copying deployment files...'
+            sh 'cp appspec.yml build/'
+            sh 'cp -r jenkins/scripts build/scripts/'
+
             echo 'Archiving build artifacts…'
             archiveArtifacts artifacts: 'build/**', fingerprint: true
 
