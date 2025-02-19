@@ -56,7 +56,7 @@ pipeline {
 
                 echo 'Starting application...'
                 // Menjalankan aplikasi React dengan perintah nohup dan menyimpan PID
-                sh 'nohup npm start -- --host 0.0.0.0 & echo $! > app.pid'
+                sh 'nohup npm start -- --host 0.0.0.0 --port 3000 & echo $! > app.pid'
                 
                 // Menjeda eksekusi pipeline selama 1 menit
                 sleep 60
