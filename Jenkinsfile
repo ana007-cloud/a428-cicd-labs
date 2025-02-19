@@ -6,70 +6,46 @@ pipeline {
         }
     }
     stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-
         stage('Build') {
             steps {
-                echo 'Installing dependencies...'
                 sh 'npm install'
-            }
-        }
-
-        stage('Compile') {
-            steps {
-                echo 'Building React app...'
-                sh 'npm run build'
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Running tests...'
                 sh './jenkins/scripts/test.sh'
-            }
-        }
-
-        stage('Archive') {
-            steps {
-                echo 'Archiving build artifacts...'
-                archiveArtifacts 'build/**'
             }
         }
 
         stage('Manual Approval') {
             steps {
-                script {
-                    input message: "Lanjutkan ke tahap Deploy?", ok: "Proceed"
-                }
+                input message: 'Lanjutkan ke tahap Deploy?'
             }
         }
 
-        stage('Deploy') {
+        stage('Deploy') { 
             steps {
-                 echo 'Executing deploy script...'
-                // Menjalankan deliver.sh untuk tahap deploy
-                sh './jenkins/scripts/deliver.sh'
 
-                echo 'Starting application...'
-                // Menjalankan aplikasi React dengan perintah nohup dan menyimpan PID
-                sh 'nohup npm start -- --host 0.0.0.0 --port 3000 & echo $! > app.pid'
+                // Menjalankan build & start aplikasi
+                sh './jenkins/scripts/deliver.sh'  
                 
-                // Menjeda eksekusi pipeline selama 1 menit
+                echo 'Archiving build artifacts…'
+                // Arsipkan hasil build React
+                archiveArtifacts artifacts: 'build/**', fingerprint: true  
+                
+                echo 'Waiting for 1 minute…'
+                // Jeda 1 menit
                 sleep 60
-
+                
                 echo 'Stopping application...'
-                // Menghentikan aplikasi React dengan PID yang telah disimpan
-                sh 'kill -9 $(cat app.pid)'
+                sh './jenkins/scripts/kill.sh'
             }
         }
     }
     post {
         always {
-            echo 'Pipeline selesai dijalankan.'
+            echo 'Pipeline execution completed.'
         }
     }
 }
