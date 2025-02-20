@@ -1,4 +1,5 @@
 #!/bin/bash -ex
-cd /home/ubuntu/app
+cd /var/www/html
 npm install
-npm start &
+npm run build
+npx serve -s build -l 3000 &
