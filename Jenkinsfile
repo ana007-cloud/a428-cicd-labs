@@ -4,9 +4,15 @@ node {
     stage('Prepare Workspace') {
         echo 'Fetching latest repository state...'
         sh '''
+        if [ ! -d .git ]; then
+            echo "Workspace is empty. Cloning repository..."
+            git clone -b react-app https://github.com/ana007-cloud/a428-cicd-labs.git .
+        else
+            echo "Workspace exists. Fetching latest changes..."
             git fetch --all
             git reset --hard origin/react-app
             git clean -fdx
+        fi
         '''
     }
 
