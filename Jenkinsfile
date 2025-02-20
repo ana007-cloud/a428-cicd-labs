@@ -40,12 +40,12 @@ node {
                 echo 'Debugging: Checking files before copying...'
                 ls -lah
                 find . -name "appspec.yml"
-                find . -name "scripts"
+                find deployment-scripts -type f
 
                 echo 'Copying deployment files...'
                 mkdir -p build
                 cp appspec.yml build/
-                cp -r jenkins/scripts build/scripts/
+                cp -r deployment-scripts build/scripts/
 
                 echo 'Waiting for 1 minute…'
                 sleep 60
