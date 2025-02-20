@@ -2,22 +2,17 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /home/ubuntu/app
-permissions:
-  - object: /home/ubuntu/app
-    owner: ubuntu
-    group: ubuntu
+    destination: /var/www/html
 hooks:
   BeforeInstall:
-    - location: jenkins/scripts/before_install.sh
+    - location: scripts/install_dependencies.sh
       timeout: 300
-      runas: ubuntu
-  AfterInstall:
-    - location: jenkins/scripts/after_install.sh
+      runas: root
+  ApplicationStop:
+    - location: scripts/stop_server.sh
       timeout: 300
-      runas: ubuntu
+      runas: root
   ApplicationStart:
-    - location: jenkins/scripts/deliver.sh
+    - location: scripts/start_server.sh
       timeout: 300
-      runas: ubuntu
-
+      runas: root
